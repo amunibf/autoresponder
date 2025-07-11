@@ -2,6 +2,8 @@ import os
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+from email.utils import formataddr
+from email.header import Header
 from datetime import datetime, date, timedelta
 from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask, request, render_template, redirect, url_for, flash
@@ -13,6 +15,7 @@ import database_utils
 # SITE_URL: URL dasar aplikasi Anda (penting untuk tautan konfirmasi).
 # Contoh: 'http://localhost:5000' untuk pengembangan lokal, atau 'https://domainanda.com' untuk produksi.
 import dotenv
+from dotenv import load_dotenv
 load_dotenv()
 SITE_URL = os.environ.get('SITE_URL')
 
