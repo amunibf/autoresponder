@@ -124,7 +124,7 @@ def load_email_template(filepath, name, **kwargs):
             print('subject_line :',subject_line)
 
 
-            # Memisahkan akonten yang tersisa menjadi bagian teks biasa dan HTML
+            # Memisahjkan akonten yang tersisa menjadi bagian teks biasa dan HTML
             # Delimiter '---HTML_PART---' digunakan untuk memisahkan kedua bagian.
             parts = remaining_content.split('---HTML_PART---', 1) # Hanya pisahkan sekali
             plain_content = parts[0].strip()
