@@ -14,9 +14,9 @@ import database_utils
 # --- Konfigurasi Aplikasi dan Email (diambil dari variabel lingkungan) ---
 # SITE_URL: URL dasar aplikasi Anda (penting untuk tautan konfirmasi).
 # Contoh: 'http://localhost:5000' untuk pengembangan lokal, atau 'https://domainanda.com' untuk produksi.
-import dotenv
-from dotenv import load_dotenv
-load_dotenv()
+# import dotenv
+# from dotenv import load_dotenv
+# load_dotenv()
 SITE_URL = os.environ.get('SITE_URL')
 
 # Kredensial akun email SMTP Anda
@@ -52,12 +52,12 @@ DB_NAME = os.environ.get('DB_NAME')
 EMAIL_TEMPLATES = {
     'confirm_email': 'emails/confirm_email.html', # Template email konfirmasi
     1: 'emails/day1.html',
+    2: 'emails/day2.html',
     3: 'emails/day3.html',
+    4: 'emails/day4.html',
     5: 'emails/day5.html',
+    6: 'emails/day6.html',
     7: 'emails/day7.html',
-    8: 'emails/day8.html',
-    9: 'emails/day9.html',
-    10: 'emails/day10.html',
     11: 'emails/day11.html',
     12: 'emails/day12.html',
     15: 'emails/day15.html',
@@ -367,5 +367,5 @@ if __name__ == '__main__':
     # Untuk produksi, gunakan server WSGI seperti Gunicorn atau uWSGI.
     # 'debug=False' harus selalu diatur di produksi.
     # 'use_reloader=False' penting saat menggunakan scheduler untuk menghindari tugas ganda.
-    app.run(host='0.0.0.0', port=5000, debug=False, use_reloader=False)
-    # app.run(host='0.0.0.0', port=5000, debug=True, use_reloader=True)
+    # app.run(host='0.0.0.0', port=5000, debug=False, use_reloader=False)
+    app.run(host='0.0.0.0', port=5000, debug=True, use_reloader=True)
