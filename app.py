@@ -117,7 +117,7 @@ def load_email_template(filepath, name, **kwargs):
         with open(filepath, 'r', encoding='utf-8') as f:
             content = f.read()
 
-            # Memisahakan konten baris demi baris untuk mengekstrak subjeknya
+            # Memisahakan kontena baris demi baris untuk mengekstrak subjeknya
             lines = content.split('\n')
             subject_line = lines[0].replace('Subject: ', '').strip().replace('{name}', name)
             remaining_content = '\n'.join(lines[1:]).strip()
