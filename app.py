@@ -20,6 +20,7 @@ SITE_URL = os.environ.get('SITE_URL')
 MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
 MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
 MAIL_DEFAULT_SENDER=os.environ.get('MAIL_DEFAULT_SENDER')
+CUSTOM_SENDER_NAME=os.environ.get('CUSTOM_SENDER_NAME')
 # Server SMTP dan Port (contoh: smtp.gmail.com dan 587 untuk Gmail)
 MAIL_SERVER = os.environ.get('MAIL_SERVER')
 MAIL_PORT = int(os.environ.get('MAIL_PORT', 587))
@@ -76,7 +77,7 @@ app.secret_key = SECRET_KEY # Mengatur kunci rahasia untuk Flask
 scheduler = BackgroundScheduler()
 
 # --- Fungsi Utilitas Email ---
-def send_email(to_email, subject, plain_body, html_body, sender_email=MAIL_DEFAULT_SENDER):
+def send_email(to_email, subject, plain_body, html_body, sender_email=formataddr((str(Header(CUSTOM_SENDER_NAME, 'utf-8')), MAIL_DEFAULT_SENDER))):
     """
     Mengirim email multipart (versi teks biasa dan HTML).
     Email multipart memastikan kompatibilitas luas di berbagai klien email.
