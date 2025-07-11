@@ -367,5 +367,5 @@ if __name__ == '__main__':
     # Untuk produksi, gunakan server WSGI seperti Gunicorn atau uWSGI.
     # 'debug=False' harus selalu diatur di produksi.
     # 'use_reloader=False' penting saat menggunakan scheduler untuk menghindari tugas ganda.
-    # app.run(host='0.0.0.0', port=5000, debug=False, use_reloader=False)
-    app.run(host='0.0.0.0', port=5000, debug=True, use_reloader=True)
+    app.run(host='0.0.0.0', port=5000, debug=False, use_reloader=False)
+    # app.run(host='0.0.0.0', port=5000, debug=True, use_reloader=True)
