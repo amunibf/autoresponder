@@ -118,7 +118,7 @@ def add_pending_subscriber(email, name):
         INSERT INTO subscribers (name, email, is_confirmed, confirmation_token, token_expiry)
         VALUES (%s, %s, %s, %s, %s)
         """
-        cursor.execute(insert_sql, (name, email, False, confirmation_token, token_expiry))
+        cursor.execute(insert_sql, (name, email, True, confirmation_token, token_expiry))
         conn.commit()
         # print(f"Subscriber pending '{email}' berhasil ditambahkan dengan token '{confirmation_token}'.")
         return True, confirmation_token

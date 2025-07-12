@@ -95,8 +95,8 @@ def send_email(to_email, subject, plain_body, html_body, sender_email=formataddr
     msg.attach(part1)
 
     # Melampirkan bagian HTML
-    part2 = MIMEText(html_body, 'html', 'utf-8')
-    msg.attach(part2)
+    # part2 = MIMEText(html_body, 'html', 'utf-8')
+    # msg.attach(part2)
 
     try:
         # Membuat koneksi SMTP, memulai TLS (Transport Layer Security) untuk enkripsi
