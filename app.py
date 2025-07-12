@@ -14,9 +14,9 @@ import database_utils
 # --- Konfigurasi Aplikasi dan Email (diambil dari variabel lingkungan) ---
 # SITE_URL: URL dasar aplikasi Anda (penting untuk tautan konfirmasi).
 # Contoh: 'http://localhost:5000' untuk pengembangan lokal, atau 'https://domainanda.com' untuk produksi.
-# import dotenv
-# from dotenv import load_dotenv
-# load_dotenv()
+import dotenv
+from dotenv import load_dotenv
+load_dotenv()
 SITE_URL = os.environ.get('SITE_URL')
 
 # Kredensial akun email SMTP Anda
@@ -125,7 +125,7 @@ def load_email_template(filepath, name, **kwargs):
             lines = content.split('\n')
             subject_line = lines[0].replace('Subject: ', '').strip().replace('{name}', name)
             remaining_content = '\n'.join(lines[1:]).strip()
-            print('subject_line :',subject_line)
+            # print('subject_line :',subject_line)
 
 
             # Memisayhjkan akonten yang tersisa menjadi bagian teks biasa dan HTML
@@ -137,8 +137,8 @@ def load_email_template(filepath, name, **kwargs):
             # Mengganti placeholder {name}
             plain_content = plain_content.replace('{name}', name)
             html_content = html_content.replace('{name}', name)
-            print('plain_content :',plain_content)
-            print('html_content : ',html_content)
+            # print('plain_content :',plain_content)
+            # print('html_content : ',html_content)
 
             # Mengganti placeholder tambahan dari kwargs (misal: {confirmation_link})
             for key, value in kwargs.items():
@@ -171,7 +171,7 @@ def register_pending_subscriber_and_send_confirm_email(email, name):
             name,
             confirmation_link=confirmation_link # Meneruskan tautan sebagai placeholder
         )
-        print("bababa",plain_body,html_body)
+        # print("bababa",plain_body,html_body)
         if subject and plain_body and html_body:
             # Mengirim email konfirmasi
             if send_email(email, subject, plain_body, html_body):
@@ -362,11 +362,16 @@ def start_scheduler():
 if __name__ == '__main__':
     # Inisialisasi tabel database saat aplikasi dimulai
     database_utils.init_db()
+    # database_utils.init_db()
+    confirmed_subs = database_utils.get_all_confirmed_subscribers()
+    for sub in confirmed_subs:
+        print(sub)
+    run_daily_autoresponder_check()
     # Memulai scheduler untuk tugas otomatis
     start_scheduler()
     # Menjalankan aplikasi Flask.
     # Untuk produksi, gunakan server WSGI seperti Gunicorn atau uWSGI.
     # 'debug=False' harus selalu diatur di produksi.
     # 'use_reloader=False' penting saat menggunakan scheduler untuk menghindari tugas ganda.
-    app.run(host='0.0.0.0', port=5000, debug=False, use_reloader=False)
-    # app.run(host='0.0.0.0', port=5000, debug=True, use_reloader=True)
+    # app.run(host='0.0.0.0', port=5000, debug=False, use_reloader=False)
+    app.run(host='0.0.0.0', port=5000, debug=True, use_reloader=True)

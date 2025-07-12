@@ -1,4 +1,9 @@
 import os
+
+import dotenv
+from dotenv import load_dotenv
+load_dotenv()
+
 import pymysql # Menggunakan pymysql
 from datetime import datetime, timedelta
 import secrets # Untuk menghasilkan token yang aman
@@ -320,10 +325,10 @@ if __name__ == '__main__':
     #         print("Failed to confirm subscriber.")
 
     # Contoh mengambil semua subscriber yang dikonfirmasi
-    # print("\nMengambil semua subscriber yang dikonfirmasi:")
-    # confirmed_subs = get_all_confirmed_subscribers()
-    # for sub in confirmed_subs:
-    #     print(sub)
+    print("\nMengambil semua subscriber yang dikonfirmasi:")
+    confirmed_subs = get_all_confirmed_subscribers()
+    for sub in confirmed_subs:
+        print(sub)
 
     # Contoh memperbarui status email
     # if confirmed_subs:
