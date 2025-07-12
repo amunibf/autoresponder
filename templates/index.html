@@ -16,7 +16,6 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh; /* Memastikan halaman setidaknya setinggi viewport */
-            text-align: center; /* Teks di tengah */
         }
 
         /* Container utama untuk konten halaman */
@@ -29,6 +28,7 @@
             width: 90%; /* Responsif untuk layar kecil */
             box-sizing: border-box; /* Padding termasuk dalam lebar */
             border: 1px solid #e0e0e0;
+            text-align: center;
         }
 
         /* Gaya untuk judul utama */
@@ -37,6 +37,7 @@
             margin-bottom: 20px;
             font-size: 2.2em;
             line-height: 1.2;
+            text-align: center; 
         }
 
         /* Gaya untuk paragraf deskripsi */
@@ -45,6 +46,7 @@
             color: #555;
             margin-bottom: 25px;
             line-height: 1.6;
+            text-align: center; 
         }
 
         /* Gaya untuk formulir */
@@ -71,6 +73,7 @@
             font-size: 1em;
             box-sizing: border-box; /* Padding termasuk dalam lebar */
             transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            text-align: center;
         }
 
         .optin-form input[type="text"]:focus,
@@ -153,6 +156,53 @@
                 padding: 12px 20px;
                 font-size: 1em;
             }
+
+               /* Benefits */
+        .benefits-list {
+            text-align: left;
+            margin: 0 auto 40px auto;
+            max-width: 600px;
+            padding: 0 20px;
+        }
+
+        .benefits-list ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .benefits-list li {
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            position: relative;
+            padding-left: 30px;
+            text-align: left;
+        }
+
+        .benefits-list li::before {
+            content: '✓'; /* Checkmark */
+            color: #28a745; /* Green color */
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+          /* Footer */
+        .footer {
+            margin-top: 30px;
+            font-size: 0.85em;
+            color: #999;
+        }
+
+        .footer a {
+            color: #999;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
         }
     </style>
 </head>
@@ -166,22 +216,44 @@
           {% endif %}
         {% endwith %}
 
-        <h1>Dapatkan Wawasan Eksklusif Langsung ke Kotak Masuk Anda!</h1>
-        <p>Bergabunglah dengan newsletter kami dan jangan lewatkan tips, tutorial, dan update terbaru tentang [Topik Niche Anda]. Kami mengirimkan konten berkualitas secara berkala yang akan membantu Anda [Manfaat Utama].</p>
+        <h1>Want Your Dog to Stop Excessive Barking in 7 Days?</h1>
+        <p class="sub-headline">Get Your FREE Ebook "The Happy Dog Guide: Tips & Tricks for Modern Owners" and Transform Your Dog's Behavior Today!</p>
+
+        <img src="{{ url_for('static', filename='images/turkuz.png') }}" alt="Cover Buku Saya" width="200 height="300">
+
+         <div class="benefits-list">
+            <h3>In This Ebook, You'll Learn:</h3>
+            <ul>
+                <li>**Effective secrets** to stop biting, chewing, and excessive barking habits.</li>
+                <li>The **best nutrition tips** for a shiny coat, boundless energy, and optimal health.</li>
+                <li>A **step-by-step guide** to basic obedience training (sit, stay, come) without frustration, even if you're a beginner.</li>
+                <li>How to **build a stronger emotional bond** with your furry best friend.</li>
+                <li>Proactive tricks to **prevent common dog health issues** and keep your dog active for life.</li>
+            </ul>
+        </div>
+
 
         <form action="/add_subscriber" method="post" class="optin-form">
             <div>
-                <label for="name">Nama:</label>
-                <input type="text" id="name" name="name" placeholder="Nama Anda" required aria-label="Nama Anda">
+                <label for="name">Your Name:</label>
+                <input type="text" id="name" name="name" placeholder="Your Name" required aria-label="Your Name">
             </div>
             <div>
-                <label for="email">Email Anda:</label>
-                <input type="email" id="email" name="email" placeholder="email@contoh.com" required aria-label="Alamat Email Anda">
+                <label for="email">Your Email:</label>
+                <input type="email" id="email" name="email" placeholder="email@example.com" required aria-label="Your Email Address">
             </div>
-            <button type="submit">Ya, Saya Mau Update!</button>
+            <button type="submit">Yes, Email Me The Guide!</button>
+            
         </form>
 
-        <p class="privacy-note">Kami menghargai privasi Anda. Kami tidak akan pernah membagikan email Anda kepada pihak ketiga.</p>
+        <p class="privacy-note">We value your privacy. Your email is safe with us and will never be shared. No spam, guaranteed!</p>
+        <div class="footer">
+        <p>&copy; 2025 The Bux's Team. All Rights Reserved.</p>
+        <!-- <p><a href="YOUR_PRIVACY_POLICY_URL">Privacy Policy</a> | <a href="YOUR_TERMS_OF_SERVICE_URL">Terms of Service</a></p> -->
+        </div>
+
     </div>
+
+     
 </body>
 </html>

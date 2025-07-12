@@ -294,12 +294,13 @@ def add_subscriber_route():
             if existing_subscriber['is_confirmed']:
                 flash(f'Email "{email}" sudah terdaftar dan dikonfirmasi.', 'warning')
             else:
-                flash(f'Email "{email}" sudah terdaftar namun belum dikonfirmasi. Mohon cek inbox Anda atau folder spam untuk tautan konfirmasi.', 'warning')
+                # flash(f'Email "{email}" sudah terdaftar namun belum dikonfirmasi. Mohon cek inbox Anda atau folder spam untuk tautan konfirmasi.', 'warning')
+                flash(f'We already sent your ebook to "{email}" . Please check your inbox, promotion or spam folder.', 'warning')
             return redirect(url_for('home'))
 
         # Jika email belum ada, daftarkan sebagai pending dan kirim email konfirmasi
         if register_pending_subscriber_and_send_confirm_email(email, name):
-            flash(f'Terima kasih! Email konfirmasi telah dikirim ke "{email}". Mohon cek inbox atau folder spam Anda.', 'success')
+            flash(f'Thank you! Your ebook has been sent to "{email}". Please check your inbox, promotions folder, or spam folder. And please whitelist our email!', 'success')
             return redirect(url_for('home'))
         else:
             flash(f'Gagal memproses pendaftaran untuk "{email}". Mohon coba lagi nanti.', 'danger')
