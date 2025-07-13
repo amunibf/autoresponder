@@ -14,9 +14,9 @@ import database_utils
 # --- Konfigurasi Aplikasi dan Email (diambil dari variabel lingkungan) ---
 # SITE_URL: URL dasar aplikasi Anda (penting untuk tautan konfirmasi).
 # Contoh: 'http://localhost:5000' untuk pengembangan lokal, atau 'https://domainanda.com' untuk produksi.
-import dotenv
-from dotenv import load_dotenv
-load_dotenv()
+# import dotenv
+# from dotenv import load_dotenv
+# load_dotenv()
 SITE_URL = os.environ.get('SITE_URL')
 
 # Kredensial akun email SMTP Anda
@@ -78,6 +78,7 @@ app = Flask(__name__)
 app.secret_key = SECRET_KEY # Mengatur kunci rahasia untuk Flask
 # Inisialisasi scheduler latar belakang dari APScheduler
 scheduler = BackgroundScheduler()
+
 
 # --- Fungsi Utilitas Email ---
 def send_email(to_email, subject, plain_body, html_body, sender_email=formataddr((str(Header(CUSTOM_SENDER_NAME, 'utf-8')), MAIL_DEFAULT_SENDER))):
@@ -237,6 +238,9 @@ def run_daily_autoresponder_check():
         days_since_subscribed_actual = (date.today() - subscribed_date_obj).days
         # Mengubahnya menjadi hitungan hari berbasis 1 untuk perbandingan dengan hari terjadwal (Hari 1, Hari 3, dst.)
         current_schedule_day_check = days_since_subscribed_actual + 1
+        print("-----------------")
+        print("Data : ",subscriber_email,subscriber_name,"days_since_subscribed_actual : ",days_since_subscribed_actual,"current_schedule_day_check : ",current_schedule_day_check)
+        print("-----------------")
 
         for scheduled_day in sorted_schedule_days:
             # Lewati email Hari 1 jika sudah dikirim selama proses konfirmasi
@@ -246,6 +250,12 @@ def run_daily_autoresponder_check():
             # Mendapatkan status pengiriman email untuk hari terjadwal saat ini
             # Default ke 0 (False) jika kolom tidak ditemukan (meskipun seharusnya tidak terjadi setelah migrasi DB)
             email_sent_for_scheduled_day_flag = sub_row.get(f'email_sent_day{scheduled_day}', False)
+
+            print("current_schedule_day_check",current_schedule_day_check)
+            print("scheduled_day",scheduled_day)
+            print("email_sent_for_scheduled_day_flag",email_sent_for_scheduled_day_flag)
+            print("last_email_sent_day",last_email_sent_day)
+            print("-----------------")
 
             # Logika untuk mengirim email terjadwal:
             # 1. Apakah hari ini adalah hari terjadwal ATAU apakah hari terjadwal sudah terlewat (untuk mengejar email yang terlewat)?
@@ -352,26 +362,28 @@ def trigger_daily_check_manual_route():
 def start_scheduler():
     """Memulai APScheduler di latar belakang."""
     # Menambahkan tugas (job) untuk menjalankan run_daily_autoresponder_check
-    # pada jadwal 'cron' (seperti cronjob Linux) setiap hari jam 02:00 pagi WIB
-    scheduler.add_job(run_daily_autoresponder_check, 'cron', hour=2, minute=0, id='daily_autoresponder')
+    # pada jadwal 'cron' (seperti cronjob Linux) setiap hari jam 07:00 pagi WIB
+    scheduler.add_job(run_daily_autoresponder_check, 'cron', hour=9, minute=33, id='daily_autoresponder')
 
     scheduler.start() # Memulai scheduler
     print("\n--- Scheduler APScheduler Dimulai ---")
-    print(" - Pemeriksaan autoresponder harian akan berjalan setiap hari pukul 02:00 WIB.")
+    print(" - Pemeriksaan autoresponder harian akan berjalan setiap hari pukul 08:40 WIB.")
+
+start_scheduler()
 
 if __name__ == '__main__':
     # Inisialisasi tabel database saat aplikasi dimulai
     database_utils.init_db()
     # database_utils.init_db()
-    confirmed_subs = database_utils.get_all_confirmed_subscribers()
-    for sub in confirmed_subs:
-        print(sub)
-    run_daily_autoresponder_check()
+    # confirmed_subs = database_utils.get_all_confirmed_subscribers()
+    # for sub in confirmed_subs:
+    #     print(sub)
+    # run_daily_autoresponder_check()
     # Memulai scheduler untuk tugas otomatis
     start_scheduler()
     # Menjalankan aplikasi Flask.
     # Untuk produksi, gunakan server WSGI seperti Gunicorn atau uWSGI.
     # 'debug=False' harus selalu diatur di produksi.
     # 'use_reloader=False' penting saat menggunakan scheduler untuk menghindari tugas ganda.
-    # app.run(host='0.0.0.0', port=5000, debug=False, use_reloader=False)
-    app.run(host='0.0.0.0', port=5000, debug=True, use_reloader=True)
+    app.run(host='0.0.0.0', port=5000, debug=False, use_reloader=False)
+    # app.run(host='0.0.0.0', port=5000, debug=True, use_reloader=True)
