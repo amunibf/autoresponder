@@ -22,6 +22,7 @@ SITE_URL = os.environ.get('SITE_URL')
 # Kredensial akun email SMTP Anda
 MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
 MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
+MAIL_PASSWORD2 = os.environ.get('MAIL_PASSWORD2')
 MAIL_DEFAULT_SENDER=os.environ.get('MAIL_DEFAULT_SENDER')
 CUSTOM_SENDER_NAME=os.environ.get('CUSTOM_SENDER_NAME')
 # Server SMTP dan Port (contoh: smtp.gmail.com dan 587 untuk Gmail)
@@ -79,7 +80,6 @@ app.secret_key = SECRET_KEY # Mengatur kunci rahasia untuk Flask
 # Inisialisasi scheduler latar belakang dari APScheduler
 scheduler = BackgroundScheduler()
 
-
 # --- Fungsi Utilitas Email ---
 def send_email(to_email, subject, plain_body, html_body, sender_email=formataddr((str(Header(CUSTOM_SENDER_NAME, 'utf-8')), MAIL_DEFAULT_SENDER))):
     """
@@ -90,6 +90,12 @@ def send_email(to_email, subject, plain_body, html_body, sender_email=formataddr
     msg['From'] = sender_email
     msg['To'] = to_email
     msg['Subject'] = subject
+
+    msg2 = MIMEText(f"Horee optin baru! Ini dia : {to_email}")
+    msg2["Subject"] = "Selamat dapet optin baru"
+    msg2["From"] = "laptoplifestyleacademy2@gmail.com"
+    msg2["To"] = "amunibf@gmail.com"
+    sender = "laptoplifestyleacademy2@gmail.com"
 
     # Melampirkan bagian teks biasa (fallback jika klien tidak mendukung HTML)
     part1 = MIMEText(plain_body, 'plain', 'utf-8')
@@ -102,15 +108,22 @@ def send_email(to_email, subject, plain_body, html_body, sender_email=formataddr
     try:
         # Membuat koneksi SMTP, memulai TLS (Transport Layer Security) untuk enkripsi
         # dan login ke server SMTP.
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server2:
+            server2.login(sender, MAIL_PASSWORD2)
+            server2.send_message(msg2)
+
         with smtplib.SMTP(MAIL_SERVER, MAIL_PORT) as server:
             server.starttls() # Mengenkripsi koneksi
             server.login(MAIL_USERNAME, MAIL_PASSWORD)
             server.send_message(msg) # Mengirim pesan email
             print(f"Email multipart '{subject}' berhasil dikirim ke: {to_email}")
             return True
+
     except Exception as e:
         print(f"Gagal mengirim email multipart ke {to_email} ({subject}): {e}")
         return False
+
+
 
 def load_email_template(filepath, name, **kwargs):
     """
@@ -305,17 +318,16 @@ def add_subscriber_route():
                 flash(f'Email "{email}" sudah terdaftar dan dikonfirmasi.', 'warning')
             else:
                 # flash(f'Email "{email}" sudah terdaftar namun belum dikonfirmasi. Mohon cek inbox Anda atau folder spam untuk tautan konfirmasi.', 'warning')
-                flash(f'We already sent your ebook to "{email}" . Please check your inbox, promotion or spam folder.', 'warning')
+                flash(f'We already sent your ebook to "{email}". After signing up, our email might land in your Promotions or Spam folder. 👉 Please check those folders and drag the email into your Primary inbox so you don’t miss any awesome dog training tips!.(And don’t forget to hit “Not Spam” or “Add us to Contacts” – your dog will thank you 😉).', 'warning')
             return redirect(url_for('home'))
 
         # Jika email belum ada, daftarkan sebagai pending dan kirim email konfirmasi
         if register_pending_subscriber_and_send_confirm_email(email, name):
-            flash(f'Thank you! Your ebook has been sent to "{email}". Please check your inbox, promotions folder, or spam folder. And please whitelist our email!', 'success')
-            return redirect(url_for('home'))
+            flash(f'We already sent your ebook to your email. After signing up, our email might land in your Promotions or Spam folder. Please check those folders and drag the email into your Primary inbox so you don’t miss any awesome dog training tips!.(And don’t forget to hit “Not Spam” or “Add us to Contacts” – your dog will thank you 😉).', 'success')
         else:
             flash(f'Gagal memproses pendaftaran untuk "{email}". Mohon coba lagi nanti.', 'danger')
             return redirect(url_for('home'))
-    flash('Alamat email tidak valid.', 'danger')
+    # flash('Alamat email tidak valid.', 'danger')
     return redirect(url_for('home'))
 
 @app.route('/confirm')
