@@ -363,7 +363,7 @@ def start_scheduler():
     """Memulai APScheduler di latar belakang."""
     # Menambahkan tugas (job) untuk menjalankan run_daily_autoresponder_check
     # pada jadwal 'cron' (seperti cronjob Linux) setiap hari jam 07:00 pagi WIB
-    scheduler.add_job(run_daily_autoresponder_check, 'cron', hour=9, minute=33, id='daily_autoresponder')
+    scheduler.add_job(run_daily_autoresponder_check, 'cron', hour=0, minute=33, id='daily_autoresponder')
 
     scheduler.start() # Memulai scheduler
     print("\n--- Scheduler APScheduler Dimulai ---")
