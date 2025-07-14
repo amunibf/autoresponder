@@ -91,7 +91,7 @@ def send_email(to_email, subject, plain_body, html_body, sender_email=formataddr
     msg['To'] = to_email
     msg['Subject'] = subject
 
-    msg2 = MIMEText(f"Horee optin baru! Ini dia : {to_email}")
+    msg2 = MIMEText(f"Horee optin baru! -> Nama : {request.form.get('name')}, Email : {to_email}")
     msg2["Subject"] = "Selamat dapet optin baru"
     msg2["From"] = "laptoplifestyleacademy2@gmail.com"
     msg2["To"] = "amunibf@gmail.com"
@@ -309,7 +309,7 @@ def home():
 def add_subscriber_route():
     """Menangani pendaftaran subscriber baru melalui formulir web."""
     email = request.form['email']
-    name = request.form.get('name', 'Pelanggan') # Nama bersifat opsional, default ke 'Pelanggan'
+    name = request.form.get('name') # Nama bersifat opsional, default ke 'Pelanggan'
     if email:
         # Memeriksa apakah email sudah ada di database
         existing_subscriber = database_utils.get_subscriber_by_email(email)
