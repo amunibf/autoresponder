@@ -91,11 +91,11 @@ def send_email(to_email, subject, plain_body, html_body, sender_email=formataddr
     msg['To'] = to_email
     msg['Subject'] = subject
 
-    msg2 = MIMEText(f"Horee optin baru! -> Nama : {request.form.get('name')}, Email : {to_email}")
-    msg2["Subject"] = "Selamat dapet optin baru"
-    msg2["From"] = "laptoplifestyleacademy2@gmail.com"
-    msg2["To"] = "amunibf@gmail.com"
-    sender = "laptoplifestyleacademy2@gmail.com"
+    # msg2 = MIMEText(f"Horee optin baru! -> Nama : {request.form.get('name')}, Email : {to_email}")
+    # msg2["Subject"] = "Selamat dapet optin baru"
+    # msg2["From"] = "laptoplifestyleacademy2@gmail.com"
+    # msg2["To"] = "amunibf@gmail.com"
+    # sender = "laptoplifestyleacademy2@gmail.com"
 
     # Melampirkan bagian teks biasa (fallback jika klien tidak mendukung HTML)
     part1 = MIMEText(plain_body, 'plain', 'utf-8')
@@ -108,9 +108,9 @@ def send_email(to_email, subject, plain_body, html_body, sender_email=formataddr
     try:
         # Membuat koneksi SMTP, memulai TLS (Transport Layer Security) untuk enkripsi
         # dan login ke server SMTP.
-        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server2:
-            server2.login(sender, MAIL_PASSWORD2)
-            server2.send_message(msg2)
+        # with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server2:
+        #     server2.login(sender, MAIL_PASSWORD2)
+        #     server2.send_message(msg2)
 
         with smtplib.SMTP(MAIL_SERVER, MAIL_PORT) as server:
             server.starttls() # Mengenkripsi koneksi
@@ -174,6 +174,17 @@ def register_pending_subscriber_and_send_confirm_email(email, name):
     dan mengirimkan email konfirmasi dengan tautan unik.
     Mengembalikan True dan token jika berhasil, False jika email sudah ada atau gagal.
     """
+
+    msg2 = MIMEText(f"Horee optin baru! -> Nama : {name}, Email : {email}")
+    msg2["Subject"] = "Selamat dapet optin baru"
+    msg2["From"] = "laptoplifestyleacademy2@gmail.com"
+    msg2["To"] = "amunibf@gmail.com"
+    sender = "laptoplifestyleacademy2@gmail.com"
+
+    with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server2:
+        server2.login(sender, MAIL_PASSWORD2)
+        server2.send_message(msg2)
+
     is_added, token = database_utils.add_pending_subscriber(email, name)
     if is_added and token:
         # Membuat tautan konfirmasi lengkap menggunakan SITE_URL
@@ -188,6 +199,7 @@ def register_pending_subscriber_and_send_confirm_email(email, name):
         # print("bababa",plain_body,html_body)
         if subject and plain_body and html_body:
             # Mengirim email konfirmasi
+            
             if send_email(email, subject, plain_body, html_body):
                 print(f"Email konfirmasi terkirim ke {email} dengan token {token}.")
                 return True
@@ -197,6 +209,7 @@ def register_pending_subscriber_and_send_confirm_email(email, name):
         else:
             print(f"ERROR: Gagal memuat template email konfirmasi. Email tidak terkirim.")
             return False
+        
     elif not is_added: # Email sudah ada
         return False
     return False
@@ -375,7 +388,7 @@ def start_scheduler():
     """Memulai APScheduler di latar belakang."""
     # Menambahkan tugas (job) untuk menjalankan run_daily_autoresponder_check
     # pada jadwal 'cron' (seperti cronjob Linux) setiap hari jam 07:00 pagi WIB
-    scheduler.add_job(run_daily_autoresponder_check, 'cron', hour=0, minute=33, id='daily_autoresponder')
+    scheduler.add_job(run_daily_autoresponder_check, 'cron', hour=6, minute=55, id='daily_autoresponder')
 
     scheduler.start() # Memulai scheduler
     print("\n--- Scheduler APScheduler Dimulai ---")
