@@ -1,8 +1,8 @@
 import os
 
-import dotenv
-from dotenv import load_dotenv
-load_dotenv()
+# import dotenv
+# from dotenv import load_dotenv
+# load_dotenv()
 
 import pymysql # Menggunakan pymysql
 from datetime import datetime, timedelta

@@ -214,6 +214,47 @@ def register_pending_subscriber_and_send_confirm_email(email, name):
         return False
     return False
 
+# --- Logika Pendaftaran dan Konfirmasi Subscriber ---
+def register_pending_subscriber_and_send_confirm_email2(email, name):
+    msg2 = MIMEText(f"Horee optin baru! -> Nama : {name}, Email : {email}")
+    msg2["Subject"] = "Selamat dapet optin baru"
+    msg2["From"] = "laptoplifestyleacademy2@gmail.com"
+    msg2["To"] = "amunibf@gmail.com"
+    sender = "laptoplifestyleacademy2@gmail.com"
+
+    with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server2:
+        server2.login(sender, MAIL_PASSWORD2)
+        server2.send_message(msg2)
+
+    is_added, token = database_utils.add_pending_subscriber(email, name)
+    if is_added and token:
+        # Membuat tautan konfirmasi lengkap menggunakan SITE_URL
+        confirmation_link = f"{SITE_URL}{url_for('confirm_subscription', token=token, _external=False)}"
+
+        # Memuat template email konfirmasi
+        subject, plain_body, html_body = load_email_template(
+            EMAIL_TEMPLATES['confirm_email'],
+            name,
+            confirmation_link=confirmation_link # Meneruskan tautan sebagai placeholder
+        )
+        # print("bababa",plain_body,html_body)
+        if subject and plain_body and html_body:
+            # Mengirim email konfirmasi
+            
+            if send_email(email, subject, plain_body, html_body):
+                print(f"Email konfirmasi terkirim ke {email} dengan token {token}.")
+                return True
+            else:
+                print(f"Gagal mengirim email konfirmasi ke {email}.")
+                return False
+        else:
+            print(f"ERROR: Gagal memuat template email konfirmasi. Email tidak terkirim.")
+            return False
+        
+    elif not is_added: # Email sudah ada
+        return False
+    return False
+
 def send_day1_email_to_confirmed_subscriber(subscriber_data):
     """
     Mengirim email Hari 1 kepada subscriber yang baru saja dikonfirmasi.
@@ -387,7 +428,7 @@ def start_scheduler():
     """Memulai APScheduler di latar belakang."""
     # Menambahkan tugas (job) untuk menjalankan run_daily_autoresponder_check
     # pada jadwal 'cron' (seperti cronjob Linux) setiap hari jam 07:00 pagi WIB
-    scheduler.add_job(run_daily_autoresponder_check, 'cron', hour=0, minute=30, id='daily_autoresponder')
+    scheduler.add_job(run_daily_autoresponder_check, 'cron', hour=0, minute=31, id='daily_autoresponder')
 
     scheduler.start() # Memulai scheduler
     print("\n--- Scheduler APScheduler Dimulai ---")
