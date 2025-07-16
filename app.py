@@ -369,7 +369,8 @@ def add_subscriber_route():
         existing_subscriber = database_utils.get_subscriber_by_email(email)
         if existing_subscriber:
             if existing_subscriber['is_confirmed']:
-                flash(f'Email "{email}" sudah terdaftar dan dikonfirmasi.', 'warning')
+                # flash(f'Email "{email}" sudah terdaftar dan dikonfirmasi.', 'warning')
+                flash('You have already signed up with this email.','warning')
             else:
                 # flash(f'Email "{email}" sudah terdaftar namun belum dikonfirmasi. Mohon cek inbox Anda atau folder spam untuk tautan konfirmasi.', 'warning')
                 flash(f'We already sent your ebook to "{email}". After signing up, our email might land in your Promotions or Spam folder. 👉 Please check those folders and drag the email into your Primary inbox so you don’t miss any awesome dog training tips!.(And don’t forget to hit “Not Spam” or “Add us to Contacts” – your dog will thank you 😉).', 'warning')
