@@ -359,6 +359,12 @@ def home():
     # Tidak lagi mengambil atau merender jumlah subscriber.
     return render_template('index.html') # Tidak lagi meneruskan 'subscribers_count'
 
+@app.route('/fastwealth')
+def home2():
+    """Merender halaman utama aplikasi (halaman opt-in)."""
+    # Tidak lagi mengambil atau merender jumlah subscriber.
+    return render_template('index2.html') # Tidak lagi meneruskan 'subscribers_count'
+
 @app.route('/add_subscriber', methods=['POST'])
 def add_subscriber_route():
     """Menangani pendaftaran subscriber baru melalui formulir web."""
